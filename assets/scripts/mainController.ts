@@ -15,6 +15,12 @@ export class mainController extends Component {
     @property({ type: Node})
     public bird : Node = null;
 
+    @property({ type: Node})
+    public bigCup : Node = null;
+
+    @property({ type: Node})
+    public smallCup : Node = null;
+
 
     state = {
         foodNum : [1,2],
@@ -46,8 +52,6 @@ export class mainController extends Component {
         self.steps[index].children[randomNum2-1].active = true ;
     }
     public animation(dragNode){
-        console.log("dragNode",dragNode)
-        console.log("dragNodeName",dragNode.name)
         const self = this;
         const goToNextStep = self.goToNextStep;
         const laughAudio  = self.node.getComponent(AudioHelper).soundLaugh;
@@ -79,46 +83,290 @@ export class mainController extends Component {
 
             }
             if(dragNode.isRightAnswer){
-                const hinYaySpoonNode = dragNode.otherNode.children.filter(v=> v.name == 'hinYaySpoon')[0]
-                // dragNode.node.parent = hinYaySpoonNode;
-                const hinYayNode = dragNode.otherNode.children.filter(v=> v.name == 'hinYay')[0]
-    
-                console.log("othernode wordl Position",dragNode.otherNode.worldPosition)
-                tween(dragNode.node)
-                .to(0.6, {worldPosition: new Vec3(363,415,0)})
-                // .delay(0.5)
-                .to(0.6, {angle: 18})
-                // .delay(0.5)
-                .call(()=>{
-                    dragNode.node.parent = hinYaySpoonNode;
-                    dragNode.node.setWorldPosition(new Vec3(363,415,0))
-                })
-                .to(0.6, {worldPosition: new Vec3(343+20,295+80,0)})
-                .call(()=>{
-                    hinYayNode.getComponent(Sprite).enabled = true
-                    tween(hinYayNode)
-                    .to(2, {position: new Vec3(0,20,0)})
-                    .call(()=>{
-                        console.log("position two",hinYayNode.getPosition())
-                        dragNode.node.getComponent(Sprite).enabled = false
-                    })
-                    .start();
-                })
-                .start();
-     
                 this.state.rightMark = this.state.rightMark + 1
+
+                if(this.state.step == 1){
+                    const hinYaySpoonNode = dragNode.otherNode.children.filter(v=> v.name == 'hinYaySpoon')[0];
+                    const hinYayNode = dragNode.otherNode.children.filter(v=> v.name == 'hinYay')[0];
+                    console.log("dragNode.nodeName",dragNode.node.name);
+                    console.log(dragNode.node.getWorldPosition())
+                    if(dragNode.node.name == 'food1'){
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
+                        .to(0.6, {angle: 18})
+                        .call(()=>{
+                            dragNode.node.parent = hinYaySpoonNode;
+                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
+                        })
+                        .to(0.6, {worldPosition: new Vec3(343+20,295+80,0)})
+                        .call(()=>{
+                            hinYayNode.getComponent(Sprite).enabled = true
+                            tween(hinYayNode)
+                            .to(0.5, {position: new Vec3(0,20,0)})
+                            .call(()=>{
+                                dragNode.node.getComponent(Sprite).enabled = false
+                            })
+                            .start();
+                        })
+                        .start();
+                    }
+                    if(dragNode.node.name == 'food2'){
+                        
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
+                        .to(0.6, {angle: 18})
+                        .call(()=>{
+                            dragNode.node.parent = hinYaySpoonNode;
+                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
+                        })
+                        .to(0.6, {worldPosition: new Vec3(638,350,0)})
+                        .call(()=>{
+                            hinYayNode.getComponent(Sprite).enabled = true
+                            tween(hinYayNode)
+                            .to(0.5, {position: new Vec3(0,20,0)})
+                            .call(()=>{
+                                dragNode.node.getComponent(Sprite).enabled = false
+                            })
+                            .start();
+                        })
+                        .start();
+                    }
+        
+                }
+
+                if(this.state.step == 2){
+                    const motePhatNode = dragNode.otherNode.children.filter(v=> v.name == 'motePhat')[0];
+                    console.log(dragNode.node.getWorldPosition())
+                    if(dragNode.node.name == 'food1'){
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = motePhatNode;
+                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
+                        })
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        .start();
+                    }
+                    if(dragNode.node.name == 'food2'){
+                        
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = motePhatNode;
+                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
+                        })
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        .start();
+                    }
+        
+                }
+
+                if(this.state.step == 3){
+                    const eggNode = dragNode.otherNode.children.filter(v=> v.name == 'egg')[0];
+                    if(dragNode.node.name == 'food1'){
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = eggNode;
+                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
+                        })
+                        .parallel(
+                            tween().to(0.6, {position: new Vec3(0,0,0)}),
+                            tween().to(0.6, { scale: new Vec3(0.6,0.6,0.6) }),
+                        )
+                        .start();
+                    }
+                    if(dragNode.node.name == 'food2'){
+                        
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = eggNode;
+                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
+                        })
+                        .parallel(
+                            tween().to(0.6, {position: new Vec3(0,0,0)}),
+                            tween().to(0.6, { scale: new Vec3(0.4,0.4,0.4) }),
+                        )
+                        .start();
+                    }
+        
+                }
+
+                if(this.state.step == 4){
+                    const pelKyawNote = dragNode.otherNode.children.filter(v=> v.name == 'pelKyaw')[0];
+                    console.log(dragNode.node.getWorldPosition())
+                    if(dragNode.node.name == 'food1'){
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = pelKyawNote;
+                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
+                        })
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        .start();
+                    }
+                    if(dragNode.node.name == 'food2'){
+                        
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = pelKyawNote;
+                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
+                        })
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        .start();
+                    }
+        
+                }
+
+                if(this.state.step == 5){
+                    const nanPinNode = dragNode.otherNode.children.filter(v=> v.name == 'nanPin')[0];
+                    console.log(dragNode.node.getWorldPosition())
+                    if(dragNode.node.name == 'food1'){
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = nanPinNode;
+                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
+                        })
+                        .parallel(
+                            tween().to(0.6, {position: new Vec3(0,0,0)}),
+                            tween().to(0.6, { scale: new Vec3(0.5,0.5,0.5) }),
+                        )
+                        .start();
+                    }
+                    if(dragNode.node.name == 'food2'){
+                        
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = nanPinNode;
+                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
+                        })
+                        .parallel(
+                            tween().to(0.6, {position: new Vec3(0,0,0)}),
+                            tween().to(0.6, { scale: new Vec3(0.4,0.4,0.4) }),
+                        )
+                        .start();
+                    }
+        
+                }
+
+                if(this.state.step == 6){
+                    const spoonNode = dragNode.otherNode.children.filter(v=> v.name == 'spoon')[0];
+                    console.log(dragNode.node.getWorldPosition())
+                    if(dragNode.node.name == 'food1'){
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = spoonNode;
+                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
+                        })
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        // .parallel(
+                        //     tween().to(0.6, {position: new Vec3(0,0,0)}),
+                        //     tween().to(0.6, { scale: new Vec3(0.5,0.5,0.5) }),
+                        // )
+                        .start();
+                    }
+                    if(dragNode.node.name == 'food2'){
+                        
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = spoonNode;
+                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
+                        })
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        // .parallel(
+                        //     tween().to(0.6, {position: new Vec3(0,0,0)}),
+                        //     tween().to(0.6, { scale: new Vec3(0.4,0.4,0.4) }),
+                        // )
+                        .start();
+                    }
+        
+                }
+
+                if(this.state.step == 7){
+                    console.log(`dragNode`)
+                    console.log(dragNode)
+                    console.log(dragNode.node.getWorldPosition())
+                    if(dragNode.node.name == 'food1'){
+                        const bucketNode = dragNode.otherNode.parent.children.filter(v=> v.name == 'bigBucket')[0];
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = bucketNode;
+                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
+                        })
+                        .parallel(
+                            tween().to(0.6, {position: new Vec3(0,0,0)}),
+                            tween().to(0.6, { scale: new Vec3(0.8,0.8,0.8) }),
+                        )
+                        .call(()=>{
+                            afterSevenStep()
+                        })
+                        .start();
+                    }
+                    if(dragNode.node.name == 'food2'){
+                        const bucketNode = dragNode.otherNode.parent.children.filter(v=> v.name == 'smallBucket')[0];
+                        tween(dragNode.node)
+                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
+                        .call(()=>{
+                            dragNode.node.parent = bucketNode;
+                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
+                        })
+                        .parallel(
+                            tween().to(0.6, {position: new Vec3(0,0,0)}),
+                            tween().to(0.6, { scale: new Vec3(0.7,0.7,0.7) }),
+                        )
+                        .call(()=>{
+                            afterSevenStep()
+                        })
+                        .start();
+                    }
+        
+                }
+                
+
+               
                 if(this.state.rightMark == 2){
-                    this.state.rightMark = 0;
                     if(this.state.step < 7){
+                        this.state.rightMark = 0;
                         this.state.step += 1;
                         goToNextStep(self,this.state.step)
-                    }else{
-                        skeletonComponentOfElephant.loop = true
-                        skeletonComponentOfElephant.animation = 'dance';
+                    }
+                }
+                const afterSevenStep = () =>{
+                    if(this.state.rightMark == 2){
+                        const bigCupNode = self.bigCup;
+                        const smallCupNode = self.smallCup;
+                        const elephantMouth = bigCupNode.children.filter(v=> v.name == 'mouth')[0];
+                        const birdMouth = smallCupNode.children.filter(v=> v.name == 'mouth')[0];
+     
+                        tween(bigCupNode)
+                        .parallel(
+                            tween().to(1, {worldPosition: elephantMouth.getWorldPosition()}),
+                            tween().to(1, { scale: new Vec3(0,0,0) }),
+                        )
+                        .call(()=>{
+                            skeletonComponentOfElephant.loop = true
+                            skeletonComponentOfElephant.animation = 'dance';
+                        })
+                        .start();
 
-                        skeletonComponentOfBird.loop = true
-                        skeletonComponentOfBird.animation = 'dance';
-                        fireworkAudio.play();  
+                        tween(smallCupNode)
+                        .parallel(
+                            tween().to(1, {worldPosition: birdMouth.getWorldPosition()}),
+                            tween().to(1, { scale: new Vec3(0,0,0) }),
+                        )
+                        .call(()=>{
+                            skeletonComponentOfBird.loop = true
+                            skeletonComponentOfBird.animation = 'dance';
+                            fireworkAudio.play();  
+                        })
+                        .start();
                     }
                 }
             }
