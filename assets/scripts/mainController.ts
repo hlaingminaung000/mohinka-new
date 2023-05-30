@@ -85,30 +85,26 @@ export class mainController extends Component {
     
                 console.log("othernode wordl Position",dragNode.otherNode.worldPosition)
                 tween(dragNode.node)
-                .to(1, {worldPosition: new Vec3(363,415,0)})
+                .to(0.6, {worldPosition: new Vec3(363,415,0)})
                 // .delay(0.5)
-                .to(1, {angle: 18})
+                .to(0.6, {angle: 18})
                 // .delay(0.5)
                 .call(()=>{
                     dragNode.node.parent = hinYaySpoonNode;
-                    dragNode.node.setPosition(new Vec3(0,0,0))
+                    dragNode.node.setWorldPosition(new Vec3(363,415,0))
                 })
-                .to(0.2, {worldPosition: new Vec3(343+20,295+80,0)})
-                .delay(0.5)
+                .to(0.6, {worldPosition: new Vec3(343+20,295+80,0)})
                 .call(()=>{
                     hinYayNode.getComponent(Sprite).enabled = true
+                    tween(hinYayNode)
+                    .to(2, {position: new Vec3(0,20,0)})
+                    .call(()=>{
+                        console.log("position two",hinYayNode.getPosition())
+                        dragNode.node.getComponent(Sprite).enabled = false
+                    })
+                    .start();
                 })
                 .start();
-                tween(hinYayNode)
-                .to(0.8, {position: new Vec3(0,20,0)})
-                .start();
-                console.log('dragNode',dragNode.node)
-                console.log('hinYaySpoonNode',hinYaySpoonNode)
-
-                
-
-
-                hinYayNode.setPosition(new Vec3(0,100,0))
      
                 this.state.rightMark = this.state.rightMark + 1
                 if(this.state.rightMark == 2){
