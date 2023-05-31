@@ -21,18 +21,25 @@ export class mainController extends Component {
     @property({ type: Node})
     public smallCup : Node = null;
 
+    @property({ type: Node})
+    public logoPlacement : Node = null;
+
 
     state = {
         foodNum : [1,2],
-        step : 1,
+        step : 7,
         rightMark: 0
     }
     
     onLoad() {
         const self = this;
         this.goToNextStep(self,self.state.step)
-        // this.node.getComponent(mainController).bgm.getComponent(AudioSource).loop = true;
-        // console.log("audio",this.node.getComponent(mainController).bgm.getComponent(AudioSource))
+        // self.node.getComponent(AudioHelper).bgMusic.play();
+ 
+        tween(self.logoPlacement)
+        .to(1, {position: new Vec3(403,273,0)})
+        .start();
+        
     }
 
     public goToNextStep(self,step) {
@@ -41,15 +48,34 @@ export class mainController extends Component {
         const index = step - 1;
         const randomNum1 = self.getRandomNumber(self.state.foodNum);
         const filteredArray = self.state.foodNum.filter((num)=> randomNum1 != num );
-        
         const randomNum2 = self.getRandomNumber(filteredArray);
-        self.steps[index].children[randomNum1-1].setPosition(new Vec3(-180,-40))
-        self.steps[index].children[randomNum2-1].setPosition(new Vec3(100,-30))
+
+        const leftFoodNode = self.steps[index].children[randomNum1-1];
+        const rightFoodNode = self.steps[index].children[randomNum2-1]
+        leftFoodNode.setPosition(new Vec3(-180,-40))
+        rightFoodNode.setPosition(new Vec3(100,-30))
+
+        const originalScaleForLeftFood = leftFoodNode.scale.clone()
+        const originalScaleForRightFood = rightFoodNode.scale.clone()
+
+        leftFoodNode.scale = new Vec3(0,0,0)
+        rightFoodNode.scale = new Vec3(0,0,0)
+
 
         self.steps[index].active = true;
         self.steps[index].active = true;
-        self.steps[index].children[randomNum1-1].active = true ;
-        self.steps[index].children[randomNum2-1].active = true ;
+        leftFoodNode.active = true ;
+        rightFoodNode.active = true ;
+
+        tween( leftFoodNode)
+        .to(1, {scale: originalScaleForLeftFood})
+        .start();
+
+        tween( rightFoodNode)
+        .to(1, {scale: originalScaleForRightFood})
+        .start();
+     
+        
     }
     public animation(dragNode){
         const self = this;
@@ -63,6 +89,8 @@ export class mainController extends Component {
         if(dragNode.isContact == true){
             if(dragNode.otherNode.name == 'bigCup'){
                 skeletonComponentOfElephant.loop = false;
+                angryAudio.stop();
+                laughAudio.stop();
                 if(dragNode.isRightAnswer){
                     skeletonComponentOfElephant.animation = 'laugh';
                     laughAudio.play();
@@ -70,9 +98,19 @@ export class mainController extends Component {
                     skeletonComponentOfElephant.animation = 'angry';
                     angryAudio.play();
                 }
+                skeletonComponentOfElephant.setCompleteListener((value) => {
+                    if(value.animation.name == 'dance'){
+                        skeletonComponentOfBird.loop = true;
+                    }else{
+                        skeletonComponentOfElephant.animation = 'idle';
+                        skeletonComponentOfElephant.loop = true;
+                    }
+                });
             }
             if(dragNode.otherNode.name == 'smallCup'){
                 skeletonComponentOfBird.loop = false;
+                angryAudio.stop();
+                laughAudio.stop();
                 if(dragNode.isRightAnswer){
                     skeletonComponentOfBird.animation = 'laugh';
                     laughAudio.play();
@@ -80,6 +118,15 @@ export class mainController extends Component {
                     skeletonComponentOfBird.animation = 'angry';
                     angryAudio.play();    
                 }
+                skeletonComponentOfBird.setCompleteListener((value) => {
+
+                    if(value.animation.name == 'dance'){
+                        skeletonComponentOfBird.loop = true;
+                    }else{
+                        skeletonComponentOfBird.animation = 'idle';
+                        skeletonComponentOfBird.loop = true;
+                    }
+                });
 
             }
             if(dragNode.isRightAnswer){
@@ -305,6 +352,7 @@ export class mainController extends Component {
                             tween().to(0.6, { scale: new Vec3(0.8,0.8,0.8) }),
                         )
                         .call(()=>{
+                            console.log("finished1")
                             afterSevenStep()
                         })
                         .start();
@@ -322,6 +370,7 @@ export class mainController extends Component {
                             tween().to(0.6, { scale: new Vec3(0.7,0.7,0.7) }),
                         )
                         .call(()=>{
+                            console.log("finished2")
                             afterSevenStep()
                         })
                         .start();

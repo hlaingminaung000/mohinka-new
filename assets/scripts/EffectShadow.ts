@@ -78,6 +78,7 @@ export class EffectShadow extends Component {
         let movementPercent = movementY / this._moveRatio;
         let opacityAdj = movementPercent * this._opactiyRatio;
 
+
         let opacityVal = this.opacityRange.x - opacityAdj;
         this.getComponent(UIOpacity).opacity = (opacityVal > this.opacityRange.x) ? this.opacityRange.x : opacityVal;
 
