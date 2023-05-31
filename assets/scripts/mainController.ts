@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Skeleton, Vec3,sp, tween, ParticleSystem2D, Color, v2, AudioSource,game, Sprite } from 'cc';
-import { AudioHelper } from './helperAudio';
+import { AudioClipNames, AudioHelper } from './helperAudio';
 const { ccclass, property } = _decorator;
 
 
@@ -27,14 +27,14 @@ export class mainController extends Component {
 
     state = {
         foodNum : [1,2],
-        step : 7,
+        step : 1,
         rightMark: 0
     }
     
     onLoad() {
         const self = this;
         this.goToNextStep(self,self.state.step)
-        // self.node.getComponent(AudioHelper).bgMusic.play();
+        // self.node.getComponent(AudioHelper).play(AudioClipNames.bg);
  
         tween(self.logoPlacement)
         .to(1, {position: new Vec3(403,273,0)})

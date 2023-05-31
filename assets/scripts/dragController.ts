@@ -2,6 +2,7 @@ import { _decorator, BoxCollider2D, Collider2D, Component, Contact2DType, direct
 import { dropController } from "./dropController";
 import { mainController } from "./mainController";
 import { AudioHelper } from "./helperAudio";
+import { EffectFloating } from "./EffectFloating";
 const { ccclass, property, requireComponent } = _decorator;
 @ccclass("dragController")
 @requireComponent([BoxCollider2D, RigidBody2D])
@@ -101,6 +102,8 @@ export class dragController extends Component {
 
     onTouchStart(event: EventTouch) {
         let self = this;
+        console.log("hello")
+        self.node.getComponent(EffectFloating).stop()
 
         if(self.isLock){
             return;
@@ -167,6 +170,7 @@ export class dragController extends Component {
             } else {
                 console.log("drag: diff ans");
                 self._returnToInitPos();
+                
             }
 
             let dropCtrl: dropController = self.otherNode.getComponent(dropController);
@@ -224,6 +228,7 @@ export class dragController extends Component {
                 self.onReachedInitPosition.forEach((e: EventHandler) => {
                     e.emit([]);
                 });
+                self.node.getComponent(EffectFloating).play()
             })
             .start();
     }
