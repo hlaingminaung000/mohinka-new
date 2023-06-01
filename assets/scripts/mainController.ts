@@ -34,7 +34,7 @@ export class mainController extends Component {
     onLoad() {
         const self = this;
         this.goToNextStep(self,self.state.step)
-        // self.node.getComponent(AudioHelper).play(AudioClipNames.bg);
+        self.node.getComponent(AudioHelper).play(AudioClipNames.bg);
  
         tween(self.logoPlacement)
         .to(1, {position: new Vec3(403,273,0)})
