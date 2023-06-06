@@ -12,7 +12,8 @@ export enum AudioClipNames{
     "meow",
     "hide",
     "show",
-    "win"
+    "win",
+    "eat"
 }
 
 @ccclass('AudioHelper')
@@ -36,9 +37,11 @@ export class AudioHelper extends Component {
     @property(AudioClip)
     public soundHide: AudioClip;
 
-
     @property(AudioClip)
     public soundWin: AudioClip;
+
+    @property(AudioClip)
+    public soundEat: AudioClip;
 
     private audio: AudioSource = new AudioSource("twinkle");
 
@@ -66,14 +69,17 @@ export class AudioHelper extends Component {
                 this.audio.playOneShot(this.soundHide);
                 break;
 
-                case AudioClipNames.show:
-                    this.audio.playOneShot(this.soundShow);
-                    break;
+            case AudioClipNames.show:
+                this.audio.playOneShot(this.soundShow);
+                break;
 
+            case AudioClipNames.win:
+                this.audio.playOneShot(this.soundWin);
+                break;
 
-                case AudioClipNames.win:
-                    this.audio.playOneShot(this.soundWin);
-                    break;
+            case AudioClipNames.eat:
+                this.audio.playOneShot(this.soundEat);
+                break;
         }
     }
 

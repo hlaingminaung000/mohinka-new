@@ -1,5 +1,6 @@
-import { _decorator, Component, Node, Skeleton, Vec3,sp, tween, ParticleSystem2D, Color, v2, AudioSource,game, Sprite } from 'cc';
+import { _decorator, Component, Node, Skeleton, Vec3,sp, tween, ParticleSystem2D, Color, v2, AudioSource,game, Sprite, UIOpacity, ParticleSystemComponent } from 'cc';
 import { AudioClipNames, AudioHelper } from './helperAudio';
+import { EffectShadow } from './EffectShadow';
 const { ccclass, property } = _decorator;
 
 
@@ -27,17 +28,21 @@ export class mainController extends Component {
 
     state = {
         foodNum : [1,2],
-        step : 1,
+        step : 2,
         rightMark: 0
     }
     
     onLoad() {
         const self = this;
         this.goToNextStep(self,self.state.step)
-        self.node.getComponent(AudioHelper).play(AudioClipNames.bg);
+        // self.node.getComponent(AudioHelper).play(AudioClipNames.bg);
+        const skeletonComponentOfElephant = self.elephant.getComponent(sp.Skeleton);
+        const skeletonComponentOfBird =  self.bird.getComponent(sp.Skeleton);
+        skeletonComponentOfElephant.animation = "idle";
+        skeletonComponentOfBird.animation = "idle";
  
         tween(self.logoPlacement)
-        .to(1, {position: new Vec3(403,273,0)})
+        .to(1, {position: new Vec3(352,222,0)})
         .start();
         
     }
@@ -50,10 +55,19 @@ export class mainController extends Component {
         const filteredArray = self.state.foodNum.filter((num)=> randomNum1 != num );
         const randomNum2 = self.getRandomNumber(filteredArray);
 
-        const leftFoodNode = self.steps[index].children[randomNum1-1];
-        const rightFoodNode = self.steps[index].children[randomNum2-1]
-        leftFoodNode.setPosition(new Vec3(-180,-40))
-        rightFoodNode.setPosition(new Vec3(100,-30))
+        const leftFoodNode = self.steps[index].children[randomNum1-1].children[1];
+        const rightFoodNode = self.steps[index].children[randomNum2-1].children[1];
+
+        const leftFoodShadow = self.steps[index].children[randomNum1-1].children[0];
+        const rightFoodShadow = self.steps[index].children[randomNum2-1].children[0];
+
+        leftFoodNode.setPosition(new Vec3(-128,5))
+        rightFoodNode.setPosition(new Vec3(74,-0.6))
+        const {x : leftX,y: leftY} = self.getShowdowPostition(leftFoodNode,step,-128,5)
+        const {x : rightX,y: rightY} = self.getShowdowPostition(rightFoodNode,step,74,-0.6)
+
+        leftFoodShadow.setPosition(new Vec3(leftX,leftY))
+        rightFoodShadow.setPosition(new Vec3(rightX,rightY))
 
         const originalScaleForLeftFood = leftFoodNode.scale.clone()
         const originalScaleForRightFood = rightFoodNode.scale.clone()
@@ -66,6 +80,8 @@ export class mainController extends Component {
         self.steps[index].active = true;
         leftFoodNode.active = true ;
         rightFoodNode.active = true ;
+        leftFoodShadow.active = true ;
+        rightFoodShadow.active = true ;
 
         tween( leftFoodNode)
         .to(1, {scale: originalScaleForLeftFood})
@@ -78,11 +94,13 @@ export class mainController extends Component {
         
     }
     public animation(dragNode){
+        console.log("dragNode",dragNode)
         const self = this;
         const goToNextStep = self.goToNextStep;
         const laughAudio  = self.node.getComponent(AudioHelper).soundLaugh;
         const angryAudio = self.node.getComponent(AudioHelper).soundMeow;
         const fireworkAudio = self.node.getComponent(AudioHelper).soundWin;
+        const eatAudio = self.node.getComponent(AudioHelper).soundEat;
 
         const skeletonComponentOfElephant = self.elephant.getComponent(sp.Skeleton);
         const skeletonComponentOfBird =  self.bird.getComponent(sp.Skeleton);
@@ -135,77 +153,64 @@ export class mainController extends Component {
                 if(this.state.step == 1){
                     const hinYaySpoonNode = dragNode.otherNode.children.filter(v=> v.name == 'hinYaySpoon')[0];
                     const hinYayNode = dragNode.otherNode.children.filter(v=> v.name == 'hinYay')[0];
-                    console.log("dragNode.nodeName",dragNode.node.name);
-                    console.log(dragNode.node.getWorldPosition())
+                    const particle = dragNode.otherNode.children.filter(v=> v.name == 'particle')[0].getComponent(ParticleSystem2D);
+                    const steam = dragNode.otherNode.children.filter(v=> v.name == 'steam')[0];
+                    let xD ;let yD;let w;let h;
                     if(dragNode.node.name == 'food1'){
-                        tween(dragNode.node)
-                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
-                        .to(0.6, {angle: 18})
-                        .call(()=>{
-                            dragNode.node.parent = hinYaySpoonNode;
-                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
-                        })
-                        .to(0.6, {worldPosition: new Vec3(343+20,295+80,0)})
-                        .call(()=>{
-                            hinYayNode.getComponent(Sprite).enabled = true
-                            tween(hinYayNode)
-                            .to(0.5, {position: new Vec3(0,20,0)})
-                            .call(()=>{
-                                dragNode.node.getComponent(Sprite).enabled = false
-                            })
-                            .start();
-                        })
-                        .start();
+                        xD = 410;yD=300;w = 197;h = 58;// w = 'hinyay width // h= 'hinyay height
                     }
                     if(dragNode.node.name == 'food2'){
-                        
-                        tween(dragNode.node)
-                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
-                        .to(0.6, {angle: 18})
+                        xD = 630;yD=300;w = 156;h = 55;
+                    }
+                    tween(dragNode.node)
+                    .to(0.6, {worldPosition: new Vec3(xD,yD,0)})
+                    .call(()=>{
+                        dragNode.node.parent = hinYaySpoonNode;
+                        dragNode.node.setWorldPosition(new Vec3(xD,yD,0))
+                    })
+                    .to(0.6, {angle: 18})
+                    .call(()=>{
+                        particle.resetSystem();
+                        tween(hinYayNode)
+                        .to(1.5, { width: w, height: h })
                         .call(()=>{
-                            dragNode.node.parent = hinYaySpoonNode;
-                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
-                        })
-                        .to(0.6, {worldPosition: new Vec3(638,350,0)})
-                        .call(()=>{
-                            hinYayNode.getComponent(Sprite).enabled = true
-                            tween(hinYayNode)
-                            .to(0.5, {position: new Vec3(0,20,0)})
+                            particle.stopSystem()
+                            tween(dragNode.node)
+                            .to(0.2,{scale: new Vec3(0,0,0)})
                             .call(()=>{
-                                dragNode.node.getComponent(Sprite).enabled = false
+                                steam.getComponent(Sprite).enabled = true
+                                const action1 = tween(steam).to(1, { width: 163, height: 175 })
+                                const action2 = tween(steam).to(1, { width: 163, height: 130 })
+                                tween(steam)
+                                .sequence(action1,action2)
+                                .repeatForever()
+                                .start()
                             })
                             .start();
                         })
                         .start();
-                    }
+                    })
+                    .start();
         
                 }
 
                 if(this.state.step == 2){
                     const motePhatNode = dragNode.otherNode.children.filter(v=> v.name == 'motePhat')[0];
-                    console.log(dragNode.node.getWorldPosition())
+                    let xD ;let yD;let w;let h;
                     if(dragNode.node.name == 'food1'){
-                        tween(dragNode.node)
-                        .to(0.6, {worldPosition: new Vec3(363,420,0)})
-                        .call(()=>{
-                            dragNode.node.parent = motePhatNode;
-                            dragNode.node.setWorldPosition(new Vec3(363,420,0))
-                        })
-                        .to(0.6, {position: new Vec3(0,0,0)})
-                        .start();
+                        xD = 410;yD=300;
                     }
                     if(dragNode.node.name == 'food2'){
-                        
-                        tween(dragNode.node)
-                        .to(0.6, {worldPosition: new Vec3(638,420,0)})
-                        .call(()=>{
-                            dragNode.node.parent = motePhatNode;
-                            dragNode.node.setWorldPosition(new Vec3(638,420,0))
-                        })
-                        .to(0.6, {position: new Vec3(0,0,0)})
-                        .start();
+                        xD = 630;yD=300;
                     }
-        
+                    tween(dragNode.node)
+                    .to(0.6, {worldPosition: new Vec3(xD,yD,0)})
+                    .call(()=>{
+                        dragNode.node.parent = motePhatNode;
+                        dragNode.node.setWorldPosition(new Vec3(xD,yD,0))
+                    })
+                    .to(0.6, {position: new Vec3(0,0,0)})
+                    .start();
                 }
 
                 if(this.state.step == 3){
@@ -217,10 +222,11 @@ export class mainController extends Component {
                             dragNode.node.parent = eggNode;
                             dragNode.node.setWorldPosition(new Vec3(363,420,0))
                         })
-                        .parallel(
-                            tween().to(0.6, {position: new Vec3(0,0,0)}),
-                            tween().to(0.6, { scale: new Vec3(0.6,0.6,0.6) }),
-                        )
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        // .parallel(
+                        //     tween().to(0.6, {position: new Vec3(0,0,0)}),
+                        //     tween().to(0.6, { scale: new Vec3(0.6,0.6,0.6) }),
+                        // )
                         .start();
                     }
                     if(dragNode.node.name == 'food2'){
@@ -231,10 +237,7 @@ export class mainController extends Component {
                             dragNode.node.parent = eggNode;
                             dragNode.node.setWorldPosition(new Vec3(638,420,0))
                         })
-                        .parallel(
-                            tween().to(0.6, {position: new Vec3(0,0,0)}),
-                            tween().to(0.6, { scale: new Vec3(0.4,0.4,0.4) }),
-                        )
+                        .to(0.6, {position: new Vec3(0,0,0)})
                         .start();
                     }
         
@@ -277,9 +280,10 @@ export class mainController extends Component {
                             dragNode.node.parent = nanPinNode;
                             dragNode.node.setWorldPosition(new Vec3(363,420,0))
                         })
+                        // .to(0.6, {position: new Vec3(0,0,0)})
                         .parallel(
                             tween().to(0.6, {position: new Vec3(0,0,0)}),
-                            tween().to(0.6, { scale: new Vec3(0.5,0.5,0.5) }),
+                            tween().to(0.6, { scale: new Vec3(0.18,0.18,0.18) }),
                         )
                         .start();
                     }
@@ -291,10 +295,11 @@ export class mainController extends Component {
                             dragNode.node.parent = nanPinNode;
                             dragNode.node.setWorldPosition(new Vec3(638,420,0))
                         })
-                        .parallel(
-                            tween().to(0.6, {position: new Vec3(0,0,0)}),
-                            tween().to(0.6, { scale: new Vec3(0.4,0.4,0.4) }),
-                        )
+                        .to(0.6, {position: new Vec3(0,0,0)})
+                        // .parallel(
+                        //     tween().to(0.6, {position: new Vec3(0,0,0)}),
+                        //     tween().to(0.6, { scale: new Vec3(0.4,0.4,0.4) }),
+                        // )
                         .start();
                     }
         
@@ -393,27 +398,43 @@ export class mainController extends Component {
                         const smallCupNode = self.smallCup;
                         const elephantMouth = bigCupNode.children.filter(v=> v.name == 'mouth')[0];
                         const birdMouth = smallCupNode.children.filter(v=> v.name == 'mouth')[0];
+                        const shadowForBigCup = bigCupNode.children.filter(v=> v.name == 'shadow')[0];
+                        const shadowForSmallCup = smallCupNode.children.filter(v=> v.name == 'shadow')[0];
+                        shadowForBigCup.active = false;
+                        shadowForSmallCup.active = false;
+                        eatAudio.play();
      
                         tween(bigCupNode)
                         .parallel(
-                            tween().to(1, {worldPosition: elephantMouth.getWorldPosition()}),
-                            tween().to(1, { scale: new Vec3(0,0,0) }),
+                            tween().to(2, {worldPosition: elephantMouth.getWorldPosition()}),
+                            tween().to(2, { scale: new Vec3(0.2,0.2,0) }),
                         )
                         .call(()=>{
-                            skeletonComponentOfElephant.loop = true
-                            skeletonComponentOfElephant.animation = 'dance';
+                            tween(bigCupNode.getComponent(UIOpacity))
+                            .to(0.2,{opacity: 0})
+                            .call(()=>{
+                                skeletonComponentOfElephant.loop = true
+                                skeletonComponentOfElephant.animation = 'dance';
+                                eatAudio.stop();
+                            })
+                            .start()
                         })
                         .start();
 
                         tween(smallCupNode)
                         .parallel(
-                            tween().to(1, {worldPosition: birdMouth.getWorldPosition()}),
-                            tween().to(1, { scale: new Vec3(0,0,0) }),
+                            tween().to(2, {worldPosition: birdMouth.getWorldPosition()}),
+                            tween().to(2, { scale: new Vec3(0.2,0.2,0) }),
                         )
                         .call(()=>{
-                            skeletonComponentOfBird.loop = true
-                            skeletonComponentOfBird.animation = 'dance';
-                            fireworkAudio.play();  
+                            tween(smallCupNode.getComponent(UIOpacity))
+                            .to(0.2,{opacity: 0})
+                            .call(()=>{
+                                skeletonComponentOfBird.loop = true
+                                skeletonComponentOfBird.animation = 'dance';
+                                fireworkAudio.play();
+                            })
+                            .start()
                         })
                         .start();
                     }
@@ -431,11 +452,29 @@ export class mainController extends Component {
         return randomNumber;
     }
 
+    getShowdowPostition(node,step,nodeX,nodeY){
+        let shadowXPosition;
+        let shadowYPosition ;
+        if(step == 1){
+            shadowXPosition = nodeX -((node.getContentSize().width/3) * node.scale.x);
+            shadowYPosition = nodeY-((node.getContentSize().height/2) * node.scale.y);
+        }else if(step == 2){
+            shadowXPosition = nodeX -((node.getContentSize().width/14) * node.scale.x);
+            shadowYPosition = nodeY -((node.getContentSize().height/2) * node.scale.y);
+        }else if(step == 6){
+            shadowXPosition = nodeX -((node.getContentSize().width/3) * node.scale.x);
+            shadowYPosition = nodeY -((node.getContentSize().height/2) * node.scale.y);
+        }else if(step == 7){
+            shadowXPosition = nodeX -((node.getContentSize().width/14) * node.scale.x);
+            shadowYPosition = nodeY -((node.getContentSize().height/3) * node.scale.y);
+        }else{
+            shadowXPosition = nodeX-((node.getContentSize().width/6) * node.scale.x);
+            shadowYPosition = nodeY -((node.getContentSize().height/2) * node.scale.y);
+        }
+        return {x: shadowXPosition,y:shadowYPosition}
+    }
+
     start() {
-        // this.food1.active = true;
-        // this.food2.active = true;
-        // this.food1.setPosition((new Vec3(27.44,-175.466,0)))
-        // this.food2.setPosition((new Vec3(-413.745,-175.546,0)))
 
     }
 

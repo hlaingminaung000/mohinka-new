@@ -102,7 +102,7 @@ export class dragController extends Component {
 
     onTouchStart(event: EventTouch) {
         let self = this;
-        console.log("hello")
+        console.log("onTouchStart")
         self.node.getComponent(EffectFloating).stop()
 
         if(self.isLock){
@@ -122,7 +122,9 @@ export class dragController extends Component {
     }
 
     onTouchMove(event: EventTouch) {
+        console.log("onTouchMove")
         let self = this;
+        self.node.parent.children[0].active = false;
         if (!this.isDragging) {
             return;
         }
@@ -138,8 +140,10 @@ export class dragController extends Component {
     }
 
     onTouchEnd(event: EventTouch) {
+        console.log("onTouchEnd")
         
         let self = this;
+        
         if (!this.isDragging) {
             return;
         }
@@ -216,6 +220,7 @@ export class dragController extends Component {
 
     _returnToInitPos() {
         let self = this;
+        self.node.parent.children[0].active = true;
         if (!this.returnToInitPosition) {
             return;
         }

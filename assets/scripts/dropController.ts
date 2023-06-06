@@ -48,7 +48,7 @@ export class dropController extends Component {
             let c = this.node.getComponent(BoxCollider2D);
             c.tag = this.colliderTag;
             c.sensor = true;
-            c.size = this.colliderSize;
+            // c.size = this.colliderSize;
         }
     }
 
