@@ -61,6 +61,8 @@ export class dragController extends Component {
     @property({ type: [EventHandler] })
     public onReachedInitPosition: EventHandler[] = [];
 
+    private returingToInit = false;
+
 
     onLoad() {
         let self = this;
@@ -101,6 +103,7 @@ export class dragController extends Component {
     }
 
     onTouchStart(event: EventTouch) {
+        if(this.returingToInit == true) return;
         let self = this;
         console.log("onTouchStart")
         self.node.getComponent(EffectFloating).stop()
@@ -122,6 +125,7 @@ export class dragController extends Component {
     }
 
     onTouchMove(event: EventTouch) {
+        if(this.returingToInit == true) return;
         console.log("onTouchMove")
         let self = this;
         self.node.parent.children[0].active = false;
@@ -158,6 +162,7 @@ export class dragController extends Component {
         } else {
             
             if (self.isRightAnswer) {
+                this.onDestroy()
 
                 if(self.lockWhenDragEndWithSameTag){
                     self.lockDrag();
@@ -219,6 +224,7 @@ export class dragController extends Component {
     }
 
     _returnToInitPos() {
+        this.returingToInit = true;
         let self = this;
         self.node.parent.children[0].active = true;
         if (!this.returnToInitPosition) {
@@ -234,6 +240,7 @@ export class dragController extends Component {
                     e.emit([]);
                 });
                 self.node.getComponent(EffectFloating).play()
+                this.returingToInit = false
             })
             .start();
     }
