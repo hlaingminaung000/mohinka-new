@@ -1,0 +1,97 @@
+
+Bird.png
+size: 930, 558
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+angry
+  rotate: false
+  xy: 2, 17
+  size: 299, 217
+  orig: 302, 238
+  offset: 1, 10
+  index: -1
+body
+  rotate: false
+  xy: 574, 117
+  size: 177, 174
+  orig: 184, 176
+  offset: 1, 1
+  index: -1
+eye
+  rotate: true
+  xy: 753, 65
+  size: 226, 91
+  orig: 228, 93
+  offset: 1, 1
+  index: -1
+eye_base
+  rotate: false
+  xy: 312, 146
+  size: 260, 145
+  orig: 262, 147
+  offset: 1, 1
+  index: -1
+eye_close
+  rotate: false
+  xy: 312, 293
+  size: 303, 263
+  orig: 307, 293
+  offset: 2, 19
+  index: -1
+happy
+  rotate: false
+  xy: 617, 293
+  size: 303, 263
+  orig: 307, 293
+  offset: 2, 19
+  index: -1
+head
+  rotate: false
+  xy: 2, 236
+  size: 308, 320
+  orig: 308, 320
+  offset: 0, 0
+  index: -1
+left_arm
+  rotate: false
+  xy: 846, 37
+  size: 80, 152
+  orig: 80, 152
+  offset: 0, 0
+  index: -1
+left_leg
+  rotate: false
+  xy: 303, 2
+  size: 112, 142
+  orig: 120, 146
+  offset: 0, 0
+  index: -1
+mouth
+  rotate: true
+  xy: 540, 2
+  size: 35, 62
+  orig: 37, 65
+  offset: 1, 1
+  index: -1
+nose
+  rotate: false
+  xy: 846, 191
+  size: 82, 100
+  orig: 86, 112
+  offset: 1, 8
+  index: -1
+right_arm
+  rotate: false
+  xy: 417, 6
+  size: 121, 138
+  orig: 121, 138
+  offset: 0, 0
+  index: -1
+right_leg
+  rotate: true
+  xy: 540, 39
+  size: 76, 146
+  orig: 76, 146
+  offset: 0, 0
+  index: -1

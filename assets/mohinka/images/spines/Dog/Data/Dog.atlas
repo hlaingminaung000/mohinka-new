@@ -1,0 +1,104 @@
+
+Dog.png
+size: 1955, 381
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+angry
+  rotate: true
+  xy: 1118, 57
+  size: 322, 159
+  orig: 341, 174
+  offset: 12, 1
+  index: -1
+body
+  rotate: false
+  xy: 1387, 118
+  size: 221, 261
+  orig: 223, 264
+  offset: 1, 2
+  index: -1
+eye
+  rotate: true
+  xy: 1279, 105
+  size: 274, 106
+  orig: 276, 108
+  offset: 1, 1
+  index: -1
+eye_base
+  rotate: true
+  xy: 943, 45
+  size: 334, 173
+  orig: 358, 188
+  offset: 11, 9
+  index: -1
+eye_close
+  rotate: true
+  xy: 431, 5
+  size: 374, 254
+  orig: 384, 281
+  offset: 8, 4
+  index: -1
+happy
+  rotate: true
+  xy: 687, 5
+  size: 374, 254
+  orig: 384, 281
+  offset: 8, 4
+  index: -1
+head
+  rotate: false
+  xy: 2, 4
+  size: 427, 375
+  orig: 427, 397
+  offset: 0, 0
+  index: -1
+left_arm
+  rotate: true
+  xy: 1279, 5
+  size: 98, 185
+  orig: 98, 185
+  offset: 0, 0
+  index: -1
+left_leg
+  rotate: false
+  xy: 1610, 178
+  size: 152, 201
+  orig: 154, 205
+  offset: 0, 0
+  index: -1
+mouth
+  rotate: true
+  xy: 1764, 189
+  size: 66, 62
+  orig: 69, 65
+  offset: 2, 1
+  index: -1
+nose
+  rotate: false
+  xy: 1764, 257
+  size: 189, 122
+  orig: 202, 128
+  offset: 7, 5
+  index: -1
+right_arm
+  rotate: true
+  xy: 1466, 23
+  size: 93, 174
+  orig: 93, 174
+  offset: 0, 0
+  index: -1
+right_leg
+  rotate: false
+  xy: 1642, 2
+  size: 144, 174
+  orig: 144, 174
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 1788, 13
+  size: 132, 174
+  orig: 141, 190
+  offset: 1, 1
+  index: -1

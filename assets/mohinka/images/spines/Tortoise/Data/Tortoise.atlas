@@ -1,0 +1,97 @@
+
+Tortoise.png
+size: 838, 1052
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+angry
+  rotate: true
+  xy: 2, 2
+  size: 344, 293
+  orig: 378, 343
+  offset: 19, 40
+  index: -1
+body
+  rotate: false
+  xy: 297, 57
+  size: 286, 256
+  orig: 289, 259
+  offset: 2, 2
+  index: -1
+eye
+  rotate: true
+  xy: 585, 58
+  size: 255, 88
+  orig: 257, 90
+  offset: 1, 1
+  index: -1
+eye_base
+  rotate: true
+  xy: 663, 365
+  size: 334, 173
+  orig: 336, 175
+  offset: 1, 1
+  index: -1
+eye_close
+  rotate: false
+  xy: 2, 348
+  size: 348, 315
+  orig: 370, 343
+  offset: 7, 18
+  index: -1
+happy
+  rotate: true
+  xy: 352, 315
+  size: 348, 309
+  orig: 395, 349
+  offset: 32, 30
+  index: -1
+head
+  rotate: true
+  xy: 2, 665
+  size: 385, 380
+  orig: 385, 380
+  offset: 0, 0
+  index: -1
+left_arm
+  rotate: true
+  xy: 384, 694
+  size: 97, 188
+  orig: 97, 188
+  offset: 0, 0
+  index: -1
+left_leg
+  rotate: true
+  xy: 675, 45
+  size: 142, 157
+  orig: 142, 157
+  offset: 0, 0
+  index: -1
+mouth
+  rotate: true
+  xy: 744, 725
+  size: 66, 73
+  orig: 71, 96
+  offset: 3, 1
+  index: -1
+nose
+  rotate: false
+  xy: 384, 793
+  size: 400, 257
+  orig: 404, 263
+  offset: 1, 5
+  index: -1
+right_arm
+  rotate: true
+  xy: 574, 701
+  size: 90, 168
+  orig: 91, 187
+  offset: 0, 19
+  index: -1
+right_leg
+  rotate: false
+  xy: 675, 189
+  size: 143, 174
+  orig: 143, 174
+  offset: 0, 0
+  index: -1
